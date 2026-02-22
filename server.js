@@ -19,11 +19,13 @@ fs.ensureDirSync(UPLOAD_DIR);
 fs.ensureFileSync(DATA_FILE);
 
 const app = express();
+
+
+
 app.use(cors());
 app.use(express.json({limit:'10mb'}));
 app.use(express.urlencoded({extended:true, limit:'10mb'}));
 
-// serve the static front-end files in workspace root
 app.use('/', express.static(path.join(__dirname)));
 
 // multer config
@@ -49,11 +51,9 @@ const REWARDS_CATALOG = [
   {id:'rw-3', name:'T-Shirt', cost:1200}
 ];
 
-// create admin hashed password on first run (in-memory check)
 let ADMIN_HASH = null;
 (async ()=>{ ADMIN_HASH = await bcrypt.hash(ADMIN_PASS, 10); })();
 
-// admin login
 app.post('/api/admin/login', async (req,res)=>{
   const {username, password} = req.body || {};
   if(username !== ADMIN_USER) return res.status(401).json({error:'invalid'});
@@ -75,13 +75,11 @@ function authMiddleware(req,res,next){
   } catch(e){ res.status(401).json({error:'invalid token'}); }
 }
 
-// public report submission: accepts multipart/form-data with 'image' file
 app.post('/api/reports', upload.single('image'), async (req,res)=>{
   try{
     let imagePath = null;
     if(req.file){ imagePath = path.relative(__dirname, req.file.path).replace(/\\/g,'/'); }
     else if(req.body.captured){
-      // handle data URL in 'captured'
       const m = req.body.captured.match(/^data:(image\/[^;]+);base64,(.+)$/);
       if(m){
         const ext = m[1].split('/')[1] || 'jpg';
@@ -108,7 +106,6 @@ app.post('/api/reports', upload.single('image'), async (req,res)=>{
     };
     reports.unshift(r);
     writeReports(reports);
-    // return award info for client
     res.json({success:true, award:50, report:r});
   } catch(err){
     console.error(err);
@@ -116,13 +113,11 @@ app.post('/api/reports', upload.single('image'), async (req,res)=>{
   }
 });
 
-// admin list reports
 app.get('/api/admin/reports', authMiddleware, (req,res)=>{
   const reports = readReports();
   res.json({reports});
 });
 
-// admin verify
 app.post('/api/admin/reports/:id/verify', authMiddleware, (req,res)=>{
   const id = req.params.id;
   const reports = readReports();
@@ -130,7 +125,6 @@ app.post('/api/admin/reports/:id/verify', authMiddleware, (req,res)=>{
   if(idx === -1) return res.status(404).json({error:'not found'});
   if(!reports[idx].verifiedAwarded){
     reports[idx].verifiedAwarded = true;
-    // optional: mark verified and award
     reports[idx].status = 'verified';
     writeReports(reports);
     return res.json({success:true, award:100, report: reports[idx]});
@@ -138,7 +132,6 @@ app.post('/api/admin/reports/:id/verify', authMiddleware, (req,res)=>{
   res.json({success:false, message:'already verified'});
 });
 
-// rewards endpoints
 app.get('/api/rewards', (req,res)=>{ res.json({rewards: REWARDS_CATALOG}); });
 
 app.post('/api/redeem', (req,res)=>{
