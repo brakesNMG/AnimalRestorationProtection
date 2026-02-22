@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#2b8a3e" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#136a2a" stop-opacity="0.06"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g)"/>
+  <g transform="translate(80,40)" fill="#ffffff" opacity="0.95">
+    <circle cx="70" cy="70" r="48" fill="#ffffff" opacity="0.15"/>
+    <path d="M150 40c40 10 90 60 110 120s10 120-20 150-90 30-140 10S30 250 10 200 40 60 150 40z" fill="#ffffff" opacity="0.08"/>
+  </g>
+  <g transform="translate(300,90) scale(0.9)">
+    <path d="M120 20c40 0 110 30 140 80 24 38 40 120 4 156-36 36-94 18-130-10-36-28-86-76-100-120-12-38 6-106 86-106z" fill="#2b8a3e" opacity="0.18"/>
+  </g>
+  <text x="60" y="60" font-family="Poppins, Arial" font-weight="700" font-size="28" fill="#0f172a">Habitat Restore</text>
+</svg>

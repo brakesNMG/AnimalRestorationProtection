@@ -1,0 +1,93 @@
+:root{
+  --brand:#1f6f44;
+  --muted:#6b7280;
+  --bg:#fbfdf9;
+  --text:#0f172a;
+  --container:1100px;
+}
+*{box-sizing:border-box}
+body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--text);background:var(--bg);margin:0;line-height:1.5}
+.container{max-width:var(--container);margin:0 auto;padding:1rem}
+.header-grid{display:flex;align-items:center;justify-content:space-between;padding:.75rem 0}
+.brand{display:flex;align-items:center;gap:.5rem;text-decoration:none;color:inherit}
+.logo{width:44px;height:44px}
+.site-title{font-weight:700}
+.nav a{margin-left:1rem;text-decoration:none;color:var(--muted)}
+.hero{padding:2.5rem 0;min-height:40vh;display:flex;align-items:center;justify-content:center;text-align:center}
+.hero-grid{display:grid;grid-template-columns:1fr 320px;gap:1.25rem;align-items:start}
+.lead{color:var(--muted);font-size:1.06rem}
+/* Themed buttons: rounded, subtle shadow and gradient to match Animal Protectors */
+.btn{display:inline-block;color:white;padding:.6rem 1rem;border-radius:12px;text-decoration:none;font-weight:600;background:linear-gradient(135deg, #2aa06a 0%, var(--brand) 100%);box-shadow:0 6px 18px rgba(31,111,68,0.16);border:1px solid rgba(255,255,255,0.06);transition:transform .12s ease,box-shadow .12s ease,filter .12s ease}
+.hero-card{background:white;border-radius:10px;padding:1rem;box-shadow:0 6px 18px rgba(8,13,34,0.06)}
+.features{padding:2rem 0}
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.features-grid article{background:white;padding:1rem;border-radius:8px}
+.site-footer{padding:1.25rem 0;color:var(--muted)}
+.muted{color:var(--muted);font-size:.95rem}
+.points{display:flex;align-items:center;background:rgba(43,138,62,0.08);padding:.25rem .6rem;border-radius:999px}
+.points strong{color:var(--brand)}
+
+.report-form{max-width:720px;background:white;padding:1rem;border-radius:8px;box-shadow:0 6px 18px rgba(8,13,34,0.04)}
+.report-form label{display:block;margin-bottom:.75rem}
+.file-wrap{display:flex;align-items:center;gap:.6rem;margin-bottom:0.75rem;position:relative}
+.file-wrap #photo-filename{color:var(--muted);font-size:.95rem}
+/* Make the actual file input cover the chooser so native clicks work reliably */
+.file-input-hidden{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;z-index:2}
+
+/* Tabs for report / my reports */
+.tabs{display:flex;gap:0.5rem;margin:0 0 1rem}
+.tab-btn{background:transparent;border:1px solid rgba(15,23,42,0.06);padding:.5rem .75rem;border-radius:8px;cursor:pointer;color:var(--text)}
+.tab-btn.active{background:linear-gradient(135deg, rgba(42,160,106,0.12), rgba(31,111,68,0.06));border-color:rgba(42,160,106,0.18);font-weight:600}
+.tab-panel{display:none}
+.tab-panel.active{display:block}
+.report-form input[type="text"],.report-form textarea{width:100%;padding:.5rem;border:1px solid #e6e9ef;border-radius:6px}
+.image-preview img{max-width:220px;border-radius:6px;display:block;margin-top:.5rem}
+.report-item{display:flex;gap:1rem;align-items:flex-start;background:white;padding:.6rem;border-radius:8px;margin-bottom:.6rem}
+.report-thumb img{width:120px;height:80px;object-fit:cover;border-radius:6px}
+.report-body .report-meta{color:var(--muted);font-size:.9rem;margin-bottom:.25rem}
+.btn.small{padding:.32rem .6rem;font-size:.88rem;border-radius:8px}
+
+/* Camera UI removed — styles kept for reference but disabled */
+/* .camera{display:none;margin-top:.5rem;padding:.5rem;border-radius:8px}
+.camera[aria-hidden="false"]{display:block}
+.camera video{width:100%;max-width:420px;border-radius:8px;background:#000}
+.camera-controls{margin-top:.5rem;display:flex;gap:.5rem} */
+
+.hub-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1rem 0;align-items:start;justify-items:center;max-width:1100px;margin-left:auto;margin-right:auto}
+.card{display:block;width:100%;max-width:320px;background:white;padding:1rem;border-radius:10px;text-decoration:none;color:inherit;box-shadow:0 8px 20px rgba(8,13,34,0.06);transition:transform .12s ease,box-shadow .12s ease}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 30px rgba(8,13,34,0.08)}
+.card h3{margin:0 0 .4rem}
+.card p{margin:0 0 .6rem;color:var(--muted)}
+ .card-art img{width:64px;height:48px;object-fit:contain;margin-bottom:.6rem}
+
+@media(max-width:880px){
+  .hub-grid{grid-template-columns:1fr}
+}
+
+.rewards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:1rem 0}
+.reward-card{background:white;padding:1rem;border-radius:10px;box-shadow:0 8px 20px rgba(8,13,34,0.06)}
+
+/* Admin modal */
+.admin-modal{position:fixed;inset:0;background:rgba(4,8,15,0.5);display:flex;align-items:center;justify-content:center;z-index:9999}
+.admin-dialog{background:white;padding:1.25rem;border-radius:10px;max-width:360px;width:100%;box-shadow:0 12px 40px rgba(8,13,34,0.12);text-align:center}
+.admin-dialog input{width:100%;padding:.5rem;border-radius:6px;border:1px solid #e6e9ef;margin-top:.5rem}
+
+/* Decorative: hero background */
+.hero{background:linear-gradient(120deg, rgba(31,111,68,0.06), rgba(19,78,37,0.02));position:relative;overflow:hidden;padding:3rem 0}
+.hero-inner{display:flex;align-items:center;gap:1.5rem}
+.hero-art img{max-width:360px;width:100%;height:auto;border-radius:12px}
+.hero-copy{flex:1;text-align:left}
+.hero h1{margin:0 0 .6rem}
+.hero .lead{margin-bottom:1rem}
+.site-header{background:linear-gradient(90deg, rgba(255,255,255,0.8), rgba(255,255,255,0.6));backdrop-filter: blur(6px)}
+.brand .site-title{font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;letter-spacing:.2px}
+
+/* Buttons decorative */
+.btn:hover{filter:brightness(.98);transform:translateY(-3px);box-shadow:0 10px 30px rgba(31,111,68,0.2)}
+.btn:active{transform:translateY(-1px);box-shadow:0 6px 18px rgba(31,111,68,0.16)}
+.btn:focus{outline:3px solid rgba(42,160,106,0.14);outline-offset:3px}
+@media(max-width:880px){
+  .hero-grid{grid-template-columns:1fr;}
+  .features-grid{grid-template-columns:1fr}
+  .nav{display:none}
+}

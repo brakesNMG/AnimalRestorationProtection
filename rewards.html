@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Rewards — Animal Protectors</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-grid">
+      <a href="index.html" class="brand">
+        <img src="assets/logo.svg" alt="Animal Protectors logo" class="logo">
+        <span class="site-title">Animal Protectors</span>
+      </a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="report.html">Report</a>
+        <a href="rewards.html">Rewards</a>
+      </nav>
+      <div class="points">
+        <span id="points-balance">Points: <strong>0</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Rewards Catalog</h1>
+    <p class="lead">Spend your points on small conservation perks and community rewards. Points are earned by submitting verified reports.</p>
+
+    <section class="rewards-grid" id="rewards-grid">
+      <!-- populated by JS -->
+    </section>
+
+    <section>
+      <h2>Your Redemptions</h2>
+      <div id="redemptions-list"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Habitat Restore</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin — Animal Protectors</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-grid">
+      <a href="index.html" class="brand">
+        <img src="assets/logo.svg" alt="Animal Protectors logo" class="logo">
+        <span class="site-title">Animal Protectors</span>
+      </a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="report.html">Report</a>
+      </nav>
+      <div class="points">
+        <span id="points-balance">Points: <strong>0</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Admin — Verify Reports</h1>
+    <p class="lead">This admin page allows marking reports as verified. This is a simple client-side demo — not secure. Use only for testing.</p>
+
+    <div class="admin-login">
+      <label>Secret admin code: <input id="admin-pass" type="password" placeholder="enter secret code"></label>
+      <button id="admin-login" class="btn small">Unlock</button>
+    </div>
+
+    <section id="admin-panel" aria-hidden="true">
+      <h2>Pending Reports</h2>
+      <div id="admin-reports"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Animal Protectors</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+  <script>
+    (function(){
+      const loginBtn = document.getElementById('admin-login');
+      const passInput = document.getElementById('admin-pass');
+      const panel = document.getElementById('admin-panel');
+      const reportsEl = document.getElementById('admin-reports');
+      let token = null;
+      // try token from previous unlock (sessionStorage)
+      const saved = sessionStorage.getItem('hr_admin_token');
+      if(saved){ token = saved; panel.removeAttribute('aria-hidden'); }
+
+
+      async function fetchReports(){
+        // local dev mode (no server): read from localStorage
+        if(token === 'localdev'){
+          return (window.HR && window.HR.loadReports) ? window.HR.loadReports() : [];
+        }
+        const res = await fetch('/api/admin/reports', {headers: {Authorization: 'Bearer ' + token}});
+        if(!res.ok) throw new Error('Failed to fetch');
+        const body = await res.json();
+        return body.reports || [];
+      }
+
+      async function render(){
+        try{
+          const reports = await fetchReports();
+          const points = window.HR && window.HR.getPoints ? window.HR.getPoints() : 0;
+          const balance = document.querySelector('#points-balance strong'); if(balance) balance.textContent = String(points);
+          if(!reports || reports.length === 0){ reportsEl.innerHTML = '<p>No reports submitted.</p>'; return }
+          reportsEl.innerHTML = '';
+          reports.forEach(r=>{
+            const div = document.createElement('div');
+            div.className = 'report-item';
+            const imgSrc = r.imagePath ? r.imagePath : r.imageData || '';
+            div.innerHTML = `
+              <div class="report-thumb"><img src="${imgSrc}" alt="report image"></div>
+              <div class="report-body">
+                <div class="report-meta"><strong>${r.location || 'Unknown location'}</strong> • <small>${new Date(r.created).toLocaleString()}</small></div>
+                <p>${r.description || ''}</p>
+                <div class="report-actions">Status: <em>${r.status}</em>
+                  ${r.status !== 'verified' ? '<button data-id="'+r.id+'" class="btn small admin-verify">Verify</button>' : ''}
+                </div>
+              </div>
+            `;
+            reportsEl.appendChild(div);
+          });
+          reportsEl.querySelectorAll('button.admin-verify').forEach(btn=>{
+            btn.addEventListener('click', async ()=>{
+              const id = btn.getAttribute('data-id');
+              try{
+                if(token === 'localdev'){
+                  // local verification: update localStorage report
+                  const reports = window.HR && window.HR.loadReports ? window.HR.loadReports() : [];
+                  const idx = reports.findIndex(r=>r.id===id);
+                  if(idx!==-1 && reports[idx].status !== 'verified'){
+                    reports[idx].status = 'verified';
+                    if(!reports[idx].verifiedAwarded){ reports[idx].verifiedAwarded = true; window.HR.setPoints(window.HR.getPoints() + 100); }
+                    localStorage.setItem('hr_reports', JSON.stringify(reports));
+                  }
+                  alert('Report verified (local).');
+                  render();
+                  return;
+                }
+                const res = await fetch('/api/admin/reports/' + id + '/verify', {method:'POST', headers: {Authorization: 'Bearer ' + token}});
+                const body = await res.json();
+                if(body.award){ window.HR.setPoints(window.HR.getPoints() + (body.award||0)); }
+                alert('Report verified.');
+                render();
+              }catch(e){ alert('Verify failed'); }
+            })
+          })
+        } catch(e){ reportsEl.innerHTML = '<p>Unable to load reports. Are you logged in?</p>'; }
+      }
+
+      loginBtn.addEventListener('click', async ()=>{
+        try{
+          const res = await fetch('/api/admin/login', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({username:'admin', password: passInput.value})});
+          if(res.ok){
+            const body = await res.json();
+            token = body.token;
+            sessionStorage.setItem('hr_admin_token', token);
+            panel.removeAttribute('aria-hidden');
+            passInput.value='';
+            render();
+            return;
+          }
+          let msg = 'Login failed';
+          try{ const j = await res.json(); msg = j.error || j.message || JSON.stringify(j); } catch(_){ try{ msg = await res.text(); } catch(e){ msg = String(res.status); } }
+          alert(msg || 'Login failed');
+        }catch(e){
+          console.error('Admin login error', e);
+          if(confirm('Server unreachable. Use local development fallback? This is insecure.')){
+            if(passInput.value === 'IAMADMIN'){
+              token = 'localdev';
+              sessionStorage.setItem('hr_admin_token', token);
+              panel.removeAttribute('aria-hidden');
+              passInput.value='';
+              render();
+            } else {
+              alert('Local fallback failed: incorrect code');
+            }
+          } else {
+            alert('Login error: ' + (e && e.message ? e.message : 'network error'));
+          }
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

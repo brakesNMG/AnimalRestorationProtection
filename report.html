@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Report — Animal Protectors</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-grid">
+      <a href="index.html" class="brand">
+        <img src="assets/logo.svg" alt="Animal Protectors logo" class="logo">
+        <span class="site-title">Animal Protectors</span>
+      </a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+      </nav>
+      <div class="points">
+        <span id="points-balance">Points: <strong>0</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Report an Animal in Need</h1>
+    <p class="lead">Submit a report to help rescue or care for injured or distressed animals. Only submit responsibly — do not put yourself at risk.</p>
+
+    <div class="tabs">
+      <button type="button" class="tab-btn active" data-tab="form">Report</button>
+      <button type="button" class="tab-btn" data-tab="reports">My Reports</button>
+    </div>
+
+    <div id="tab-form" class="tab-panel active">
+    <form id="report-form" class="report-form">
+
+
+      <label>
+        Description
+        <textarea id="description" name="description" rows="4" placeholder="Describe the animal's condition and any immediate risks."></textarea>
+      </label>
+
+      <label>
+        Location
+        <input type="text" id="location" name="location" placeholder="Park name, GPS, address" required>
+      </label>
+
+      <label>
+        Photo evidence
+      </label>
+      <div class="file-wrap">
+        <input type="file" id="photo" name="photo" accept="image/*" class="file-input-hidden">
+        <button type="button" id="photo-choose" class="btn">Choose Photo</button>
+        <span id="photo-filename" class="muted">No file chosen</span>
+      </div>
+
+      <div id="preview" class="image-preview" aria-hidden="true"></div>
+
+      <p><button class="btn" type="submit">Submit Report</button></p>
+    </form>
+
+    </form>
+    </div>
+
+    <div id="tab-reports" class="tab-panel">
+      <section id="my-reports">
+        <h2>My Reports</h2>
+        <div id="reports-list"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>© 2026 Animal Protectors</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
