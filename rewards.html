@@ -4,47 +4,251 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Rewards — Animal Protectors</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    :root {
+      --brand-green: #6b8e6e; 
+      --brand-green-hover: #5a7a5d;
+      --brand-light: #f8faf8;
+      --text-main: #3a473c;
+    }
+
+    body {
+      color: var(--text-main);
+      background-color: var(--brand-light);
+      margin: 0;
+    }
+
+    /* Hero/Header */
+    .rewards-header {
+      background: var(--brand-green);
+      color: white;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    .points-display {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      display: inline-block;
+      padding: 15px 30px;
+      border-radius: 50px;
+      margin-top: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .points-display span {
+      font-size: 2rem;
+      font-weight: 700;
+      display: block;
+    }
+
+    /* Goal Tracker */
+    .goal-container {
+      max-width: 600px;
+      margin: -30px auto 40px auto;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    .progress-bar-bg {
+      background: #eee;
+      height: 12px;
+      border-radius: 10px;
+      margin: 15px 0;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      background: var(--brand-green);
+      height: 100%;
+      width: 0%;
+      transition: width 1s ease-in-out;
+    }
+
+    /* Reward Cards Style (No Images) */
+    .rewards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+      max-width: 1200px;
+      margin: 0 auto 60px auto;
+      padding: 0 20px;
+    }
+
+    .reward-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+      text-align: center;
+    }
+
+    .reward-card:hover { transform: translateY(-10px); }
+
+    /* Replacement Icon Box */
+    .reward-icon-box {
+      background: #f0f4f1;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+    }
+
+    .reward-content {
+      padding: 25px;
+    }
+
+    .reward-content h3 { margin: 0 0 10px 0; color: var(--brand-green); }
+    .reward-content p { font-size: 0.9rem; color: #666; margin-bottom: 20px; line-height: 1.4; }
+
+    .btn-redeem {
+      background: var(--brand-green);
+      color: white;
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-redeem:hover { background: var(--brand-green-hover); }
+
+    /* History Section */
+    .history-section {
+      max-width: 1200px;
+      margin: 0 auto 60px auto;
+      padding: 30px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+
+    .history-title { border-bottom: 2px solid var(--brand-light); padding-bottom: 15px; margin-bottom: 20px; font-weight: 700; color: var(--brand-green); }
+    .history-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #f0f0f0; }
+  </style>
 </head>
 <body>
-  <header class="site-header">
-    <div class="container header-grid">
-      <a href="index.html" class="brand">
-        <img src="assets/logo.svg" alt="Animal Protectors logo" class="logo">
-        <span class="site-title">Animal Protectors</span>
-      </a>
-      <nav class="nav">
-        <a href="index.html">Home</a>
-        <a href="report.html">Report</a>
-        <a href="rewards.html">Rewards</a>
-      </nav>
-      <div class="points">
-        <span id="points-balance">Points: <strong>0</strong></span>
+
+<header class="site-header">
+  <div class="container header-grid">
+    <a href="index.html" class="brand">
+      <img src="assets/logo.svg" alt="Logo" class="logo">
+      <span class="site-title">Animal Protectors</span>
+    </a>
+    <nav class="nav">
+      <a href="about.html">About</a>
+      <a href="report.html">Report</a>
+      <a href="rewards.html" style="font-weight: 700;">Rewards</a>
+    </nav>
+    <div class="points">Points: <strong id="nav-points">0</strong></div>
+  </div>
+</header>
+
+  <section class="rewards-header">
+    <h1>Your Rewards Hub</h1>
+    <div class="points-display">
+      <small>Available Balance</small>
+      <span id="display-points">0</span>
+    </div>
+  </section>
+
+  <div class="goal-container">
+    <p id="goal-text">Loading your progress...</p>
+    <div class="progress-bar-bg">
+      <div id="goal-progress" class="progress-fill"></div>
+    </div>
+  </div>
+
+  <main class="rewards-grid">
+    
+    <div class="reward-card">
+      <div class="reward-icon-box">🌳</div>
+      <div class="reward-content">
+        <h3>Plant a Native Tree</h3>
+        <p>Support reforestation efforts by planting a native tree in a protected area.</p>
+        <button class="btn-redeem" onclick="redeem(500, 'Plant a Native Tree')">Redeem 500pts</button>
       </div>
     </div>
-  </header>
 
-  <main class="container">
-    <h1>Rewards Catalog</h1>
-    <p class="lead">Spend your points on small conservation perks and community rewards. Points are earned by submitting verified reports.</p>
+    <div class="reward-card">
+      <div class="reward-icon-box">🏠</div>
+      <div class="reward-content">
+        <h3>Build a Nest Box</h3>
+        <p>Points go toward installing a nesting box for local endangered birds.</p>
+        <button class="btn-redeem" onclick="redeem(800, 'Build a Nest Box')">Redeem 800pts</button>
+      </div>
+    </div>
 
-    <section class="rewards-grid" id="rewards-grid">
-      <!-- populated by JS -->
-    </section>
+    <div class="reward-card">
+      <div class="reward-icon-box">🩹</div>
+      <div class="reward-content">
+        <h3>Wildlife Aid Kit</h3>
+        <p>Receive a rescue kit containing safe supplies for animal first-aid.</p>
+        <button class="btn-redeem" onclick="redeem(1200, 'Wildlife Aid Kit')">Redeem 1200pts</button>
+      </div>
+    </div>
 
-    <section>
-      <h2>Your Redemptions</h2>
-      <div id="redemptions-list"></div>
-    </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <p>© 2026 Habitat Restore</p>
-    </div>
-  </footer>
+  <section class="history-section">
+    <h2 class="history-title">Recent Activity</h2>
+    <div id="history-list"></div>
+  </section>
 
-  <script src="js/app.js"></script>
+  <script>
+    let userPoints = parseInt(localStorage.getItem('userPoints')) || 0;
+    let history = JSON.parse(localStorage.getItem('rewardHistory')) || [];
+
+    function updateUI() {
+      document.getElementById('nav-points').innerText = userPoints;
+      document.getElementById('display-points').innerText = userPoints;
+      
+      // Goal logic
+      let nextGoal = 500;
+      if (userPoints >= 500) nextGoal = 800;
+      if (userPoints >= 800) nextGoal = 1200;
+      
+      const progress = Math.min((userPoints / nextGoal) * 100, 100);
+      document.getElementById('goal-progress').style.width = progress + '%';
+      document.getElementById('goal-text').innerText = userPoints >= nextGoal ? 
+        "Goal reached! Unlock a reward below." : 
+        `You're ${nextGoal - userPoints} points away from your next goal!`;
+
+      const list = document.getElementById('history-list');
+      list.innerHTML = history.length ? history.map(item => `
+        <div class="history-item">
+          <div><strong>${item.name}</strong><br><small>${item.date}</small></div>
+          <div style="color:var(--brand-green); font-weight:700;">-${item.cost} pts</div>
+        </div>`).join('') : '<p style="text-align:center;color:#888;">No recent activity.</p>';
+    }
+
+    function redeem(cost, name) {
+      if (userPoints >= cost) {
+        userPoints -= cost;
+        history.unshift({ name, cost, date: new Date().toLocaleDateString() });
+        localStorage.setItem('userPoints', userPoints);
+        localStorage.setItem('rewardHistory', JSON.stringify(history));
+        updateUI();
+        alert(`Successfully redeemed: ${name}!`);
+      } else {
+        alert("Keep reporting to earn more points!");
+      }
+    }
+
+    updateUI();
+  </script>
 </body>
 </html>
