@@ -1,83 +1,219 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Report — Animal Protectors</title>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- FIXED: Working Poppins font link -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://www.google.com/search?q=https://fonts.gstatic.com" crossorigin>
+<link href="https://www.google.com/search?q=https://fonts.googleapis.com/css2%3Ffamily%3DPoppins:wght%40400%3B600%3B700%26display%3Dswap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+
+  <!-- FIXED: Working ml5.js library link -->
+  <script src="https://unpkg.com"></script>
+  <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+
+  <style>
+    .ai-box { margin-top: 15px; padding: 20px; border-radius: 12px; background: #f0f7ff; border: 1px solid #d0e3ff; display: none; }
+    .status-tag { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 0.85em; font-weight: bold; margin-top: 5px; }
+    .status-endangered { background: #ffebee; color: #c62828; }
+    .status-common { background: #e8f5e9; color: #2e7d32; }
+    
+    .report-card { 
+      display: flex; gap: 20px; background: white; padding: 15px; border-radius: 15px; 
+      margin-bottom: 15px; align-items: center; box-shadow: 0 8px 20px rgba(8, 13, 34, 0.06); 
+      transition: transform 0.3s ease;
+    }
+    .report-card:hover { transform: translateY(-5px); }
+    .report-card img { width: 100px; height: 100px; object-fit: cover; border-radius: 10px; }
+    .points-badge { background: #ffd700; color: #333; padding: 3px 8px; border-radius: 6px; font-weight: 700; font-size: 0.8em; margin-left: 10px; }
+    .image-preview img { width: 100%; border-radius: 10px; margin-top: 15px; max-width: 400px; border: 2px solid var(--brand); }
+  </style>
 </head>
+
 <body>
   <header class="site-header">
     <div class="container header-grid">
       <a href="index.html" class="brand">
-        <img src="assets/logo.svg" alt="Animal Protectors logo" class="logo">
+        <img src="assets/logo.svg" alt="Logo" class="logo">
         <span class="site-title">Animal Protectors</span>
       </a>
       <nav class="nav">
         <a href="index.html">Home</a>
         <a href="about.html">About</a>
+        <a href="rewards.html">Rewards</a>
       </nav>
       <div class="points">
-        <span id="points-balance">Points: <strong>0</strong></span>
+        Points: <strong id="points-balance">0</strong>
       </div>
     </div>
   </header>
 
   <main class="container">
-    <h1>Report an Animal in Need</h1>
-    <p class="lead">Submit a report to help rescue or care for injured or distressed animals. Only submit responsibly — do not put yourself at risk.</p>
+    <h1 style="margin-bottom: 10px;">Report an Animal</h1>
+    <p class="muted" style="margin-bottom: 25px;">Use our AI scanner to identify the species automatically.</p>
 
     <div class="tabs">
-      <button type="button" class="tab-btn active" data-tab="form">Report</button>
-      <button type="button" class="tab-btn" data-tab="reports">My Reports</button>
+      <button type="button" class="tab-btn active" data-tab="form">New Report</button>
+      <button type="button" class="tab-btn" data-tab="reports">My History</button>
     </div>
 
     <div id="tab-form" class="tab-panel active">
-    <form id="report-form" class="report-form">
+      <form id="report-form" class="report-form">
+        <label>Location <input type="text" id="location" required placeholder="Where was it seen?"></label>
+        <label>Notes <textarea id="description" rows="3" placeholder="Condition..."></textarea></label>
 
+        <div class="file-wrap">
+          <input type="file" id="photo" name="image" accept="image/*" style="display:none;">
+          <button type="button" id="photo-choose" class="btn">📸 Choose & Scan</button>
+          <span id="photo-filename">No file chosen</span>
+        </div>
 
-      <label>
-        Description
-        <textarea id="description" name="description" rows="4" placeholder="Describe the animal's condition and any immediate risks."></textarea>
-      </label>
+        <div id="ai-analysis" class="ai-box">
+          <p id="ai-status">⚙️ Initializing AI Engine...</p>
+          <div id="ai-results"></div>
+        </div>
 
-      <label>
-        Location
-        <input type="text" id="location" name="location" placeholder="Park name, GPS, address" required>
-      </label>
-
-      <label>
-        Photo evidence
-      </label>
-      <div class="file-wrap">
-        <input type="file" id="photo" name="photo" accept="image/*" class="file-input-hidden">
-        <button type="button" id="photo-choose" class="btn">Choose Photo</button>
-        <span id="photo-filename" class="muted">No file chosen</span>
-      </div>
-
-      <div id="preview" class="image-preview" aria-hidden="true"></div>
-
-      <p><button class="btn" type="submit">Submit Report</button></p>
-    </form>
-
-    </form>
+        <div id="preview" class="image-preview"></div>
+        <p><button class="btn" type="submit" style="width:100%; margin-top:20px; padding: 1rem;">Submit Report</button></p>
+      </form>
     </div>
 
     <div id="tab-reports" class="tab-panel">
-      <section id="my-reports">
-        <h2>My Reports</h2>
-        <div id="reports-list"></div>
-      </section>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+        <h2>Contribution History</h2>
+        <button id="clear-all" class="btn small" style="background:#ff4d4d; color:white; border:none;">Clear All</button>
+      </div>
+      <div id="reports-list"></div>
     </div>
   </main>
 
-  <footer class="site-footer">
-    <div class="container">
-      <p>© 2026 Animal Protectors</p>
-    </div>
-  </footer>
+  <script>
+    const photoInput = document.getElementById('photo');
+    const photoBtn = document.getElementById('photo-choose');
+    const aiBox = document.getElementById('ai-analysis');
+    const pointsDisplay = document.getElementById('points-balance');
+    let currentData = { species: "Unknown", status: "Common", imgBase64: "" };
 
-  <script src="js/app.js"></script>
+    const endangeredAnimals = ["tiger", "panda", "elephant", "rhino", "turtle", "leopard", "whale", "gorilla", "lion"];
+
+    pointsDisplay.innerText = localStorage.getItem('userPoints') || 0;
+
+    let classifier;
+    async function initAI() {
+      try {
+        classifier = await ml5.imageClassifier('MobileNet');
+        document.getElementById('ai-status').innerText = "✅ AI Ready! Please upload a photo.";
+      } catch (e) {
+        console.error(e);
+        document.getElementById('ai-status').innerText = "❌ AI Load Error. Ensure you are connected to the internet.";
+      }
+    }
+    initAI();
+
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-panel, .tab-btn').forEach(el => el.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+        if (btn.dataset.tab === 'reports') renderReports();
+      });
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('tab') === 'reports') {
+        const historyBtn = document.querySelector('[data-tab="reports"]');
+        if (historyBtn) historyBtn.click();
+      }
+    });
+
+    photoBtn.addEventListener('click', () => photoInput.click());
+
+    photoInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      document.getElementById('photo-filename').innerText = file.name;
+      aiBox.style.display = 'block';
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        currentData.imgBase64 = event.target.result;
+        const imgElement = new Image();
+        imgElement.src = event.target.result;
+        imgElement.onload = async () => {
+          document.getElementById('preview').innerHTML = "";
+          document.getElementById('preview').appendChild(imgElement);
+          if (classifier) {
+            try {
+              const results = await classifier.classify(imgElement);
+              const guess = results[0].label.toLowerCase();
+              const isEndangered = endangeredAnimals.some(a => guess.includes(a));
+              currentData.species = guess.split(',')[0];
+              currentData.status = isEndangered ? "Endangered" : "Common";
+              document.getElementById('ai-status').innerText = "✅ Scan Complete!";
+              document.getElementById('ai-results').innerHTML = `<strong>Animal:</strong> ${currentData.species.toUpperCase()}<br><strong>Status:</strong> <span class="status-tag ${isEndangered ? 'status-endangered' : 'status-common'}">${currentData.status}</span>`;
+            } catch (err) { document.getElementById('ai-status').innerText = "❌ Analysis Error."; }
+          }
+        };
+      };
+      reader.readAsDataURL(file);
+    });
+
+    document.getElementById('report-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!photoInput.files[0]) { alert("Please select a photo."); return; }
+
+      const formData = new FormData();
+      formData.append('image', photoInput.files[0]);
+      formData.append('location', document.getElementById('location').value);
+      formData.append('description', `${document.getElementById('description').value} (AI: ${currentData.species})`);
+
+      try {
+        const response = await fetch('/api/reports', { method: 'POST', body: formData });
+        const result = await response.json();
+        if (result.success) {
+          const ptsToAdd = currentData.status === "Endangered" ? 50 : 10;
+          let total = (parseInt(localStorage.getItem('userPoints')) || 0) + ptsToAdd;
+          localStorage.setItem('userPoints', total);
+          
+          const history = JSON.parse(localStorage.getItem('localReports')) || [];
+          history.unshift({...currentData, location: document.getElementById('location').value, pts: ptsToAdd, date: new Date().toLocaleDateString()});
+          localStorage.setItem('localReports', JSON.stringify(history));
+          
+          alert(`Success! Earned ${ptsToAdd} points.`);
+          location.reload();
+        }
+      } catch (err) {
+        alert("Server error. Ensure node server.js is running.");
+      }
+    });
+
+    function renderReports() {
+      const history = JSON.parse(localStorage.getItem('localReports')) || [];
+      const list = document.getElementById('reports-list');
+      if (history.length === 0) {
+        list.innerHTML = "<p>No history found.</p>";
+        return;
+      }
+      list.innerHTML = history.map(h => `
+        <div class="report-card">
+          <img src="${h.imgBase64}">
+          <div>
+            <h3 style="margin:0;">${h.species.toUpperCase()} <span class="points-badge">+${h.pts} pts</span></h3>
+            <span class="status-tag ${h.status === 'Endangered' ? 'status-endangered' : 'status-common'}">${h.status}</span>
+            <p style="margin:5px 0 0 0; font-size:0.9rem;"><strong>Loc:</strong> ${h.location}</p>
+            <small class="muted">${h.date || ''}</small>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('clear-all').addEventListener('click', () => {
+      if(confirm("Wipe all history?")) { localStorage.clear(); location.reload(); }
+    });
+  </script>
 </body>
 </html>
