@@ -91,3 +91,37 @@ body{font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif;color:var(--te
   .features-grid{grid-template-columns:1fr}
   .nav{display:none}
 }
+/* Smooth hover lift for your original cards */
+.hub-grid .card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 15px; /* Softer corners */
+  overflow: hidden;
+}
+
+.hub-grid .card:hover {
+  transform: translateY(-10px); /* Lifts the card up */
+  box-shadow: 0 15px 30px rgba(46, 204, 113, 0.2); /* Soft green glow */
+  border: 1px solid #2ecc71; /* Subtle green border on hover */
+}
+
+/* Make the buttons pop */
+.btn {
+  border-radius: 50px !important;
+  transition: all 0.2s ease;
+}
+
+.btn:hover {
+  filter: brightness(1.1);
+  transform: scale(1.05);
+}
+
+/* A soft fade-in for the hero art */
+.hero-art img {
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+  100% { transform: translateY(0px); }
+}
