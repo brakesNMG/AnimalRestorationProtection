@@ -4,74 +4,260 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Animal Protectors — Protecting Animals & Their Homes</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
+
+  <style>
+    :root {
+      --brand-green: #6b8e6e; 
+      --brand-green-hover: #5a7a5d;
+      --brand-light: #f8faf8;
+      --text-main: #3a473c;
+    }
+
+    body {
+      color: var(--text-main);
+      background-color: #ffffff;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    /* Animation Keyframes */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade {
+      opacity: 0; /* Starts invisible for the animation */
+      animation: fadeInUp 0.8s ease-out forwards;
+    }
+
+    .delay-1 { animation-delay: 0.2s; }
+    .delay-2 { animation-delay: 0.4s; }
+    .delay-3 { animation-delay: 0.6s; }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(
+          to bottom, 
+          rgba(0, 0, 0, 0.2) 0%, 
+          rgba(0, 0, 0, 0.1) 50%, 
+          rgba(0, 0, 0, 0.5) 100%
+        ), 
+        url('https://images.unsplash.com/photo-1502082553048-f009c37129b9?auto=format&fit=crop&q=80&w=1500'); 
+      background-size: cover;
+      background-position: center;
+      color: white;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero h1 { 
+      color: white; 
+      margin: 0 0 10px 0; 
+      font-size: 3.5rem;
+      font-weight: 700;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+
+    .hero .lead {
+      max-width: 750px;
+      margin: 0 auto 20px auto;
+      font-size: 1.3rem;
+      line-height: 1.5;
+      color: #ffffff;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+    }
+
+    .btn-white { 
+      background: white; 
+      color: var(--brand-green); 
+      padding: 16px 36px;
+      border-radius: 50px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .btn-white:hover {
+      background: #f8faf8;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+    }
+    
+    .btn-outline { 
+      border: 2px solid white; 
+      color: white; 
+      padding: 14px 34px;
+      border-radius: 50px;
+      font-weight: 600;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(5px);
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-3px);
+    }
+
+    /* Hub Section */
+    .hub {
+      padding: 80px 20px;
+      background-color: white;
+    }
+
+    .hub-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 25px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .card {
+      text-decoration: none;
+      color: inherit;
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      border: 1px solid #f0f4f1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card:hover {
+      transform: translateY(-12px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    .card-img { 
+      width: 100%; 
+      height: 150px; 
+      object-fit: cover; 
+      border-radius: 12px; 
+      margin-bottom: 20px; 
+    }
+
+    .card h3 { color: var(--brand-green); margin: 0 0 10px 0; font-size: 1.2rem; }
+    .card p { font-size: 0.95rem; color: #667a69; flex-grow: 1; margin-bottom: 20px; }
+
+    .card-action {
+      background: var(--brand-green);
+      color: white;
+      text-align: center;
+      padding: 12px 0;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    @media (max-width: 1024px) {
+      .hub-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .hub-grid { grid-template-columns: 1fr; }
+      .hero-buttons { flex-direction: column; width: 100%; }
+      .hero h1 { font-size: 2.5rem; }
+    }
+  </style>
 </head>
 <body>
   <header class="site-header">
     <div class="container header-grid">
       <a href="index.html" class="brand">
-        <img src="assets/logo.svg" alt="Animal Protectors logo" class="logo">
+        <img src="assets/logo.svg" alt="Logo" class="logo">
         <span class="site-title">Animal Protectors</span>
       </a>
       <nav class="nav">
         <a href="about.html">About</a>
         <a href="report.html">Report</a>
+        <a href="rewards.html">Rewards</a>
       </nav>
       <div class="points">
-        <span id="points-balance">Points: <strong>0</strong></span>
+        Points: <strong id="points-balance">0</strong>
       </div>
     </div>
   </header>
 
   <main>
-    <section class="hero hero-animal">
-      <div class="container hero-inner">
-        <div class="hero-art"><img src="assets/hero.svg" alt="decorative wildlife illustration"></div>
-        <div class="hero-copy">
-          <h1>Animal Protectors — Protecting Animals & Their Homes</h1>
-          <p class="lead">Report injured or distressed animals, join wildlife protection efforts, and earn rewards for conservation actions. Together we safeguard species and support animal well-being.</p>
-          <p><a class="btn" href="report.html">Report Now</a> <a class="btn" href="about.html">Learn More</a></p>
+    <section class="hero">
+      <div class="container">
+        <h1 class="animate-fade delay-1">Protecting Animals Using AI</h1>
+        <p class="lead animate-fade delay-2">Report injured animals, join protection efforts, and earn rewards for conservation actions.</p>
+        <div class="hero-buttons animate-fade delay-3">
+          <a class="btn-white" href="report.html">Report Now</a> 
+          <a class="btn-white" href="about.html">Learn More</a>
         </div>
       </div>
     </section>
 
     <section class="hub">
-      <div class="container hub-grid">
+      <div class="hub-grid">
         <a class="card" href="report.html">
-          <div class="card-art"><img src="assets/card-report.svg" alt="report"></div>
-          <h3>Report an Incident</h3>
-          <p>Submit observations of injured or distressed animals, animals in need, or environmental hazards.</p>
-          <p><span class="btn">Report</span></p>
+          <img src="https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&q=60&w=500" class="card-img" alt="Lion">
+          <h3>Report Incident</h3>
+          <p>Submit observations of animals in need using AI.</p>
+          <span class="card-action">Report</span>
         </a>
 
         <a class="card" href="about.html">
+          <img src="https://images.unsplash.com/photo-1575550959106-5a7defe28b56?auto=format&fit=crop&q=60&w=500" class="card-img" alt="Deer">
           <h3>About Us</h3>
-          <p>Learn our mission, how we work, and how to get involved.</p>
-          <p><span class="btn">Go</span></p>
+          <p>Learn our mission and how we protect wildlife.</p>
+          <span class="card-action">Go</span>
         </a>
 
-        <!-- Admin access is hidden. Use secret admin code (click logo 5× or Ctrl+Shift+A) -->
-
-        <a class="card" href="report.html#my-reports">
+        <a class="card" href="report.html?tab=reports">
+          <img src="https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?auto=format&fit=crop&q=60&w=500" class="card-img" alt="Turtle">
           <h3>My Reports</h3>
-          <p>View reports you've submitted and check their status.</p>
-          <p><span class="btn">Go</span></p>
+          <p>View your previous contributions and status.</p>
+          <span class="card-action">Go</span>
         </a>
+        
         <a class="card" href="rewards.html">
+          <img src="https://images.unsplash.com/photo-1503919005314-30d93d07d823?auto=format&fit=crop&q=60&w=500" class="card-img" alt="Elephant">
           <h3>Rewards</h3>
-          <p>Browse rewards and redeem your points.</p>
-          <p><span class="btn">Go</span></p>
+          <p>Browse the catalog and redeem your points.</p>
+          <span class="card-action">Go</span>
         </a>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <div class="container">
-      <p>© 2026 Animal Protectors — Protecting wildlife.</p>
+    <div class="container" style="text-align: center; padding: 40px 0; border-top: 1px solid #eee; color: #666;">
+      <p>© 2026 Animal Protectors — Dedicated to wildlife conservation.</p>
     </div>
   </footer>
-  <script src="js/app.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const balance = document.getElementById('points-balance');
+        if(balance) balance.innerText = localStorage.getItem('userPoints') || 0;
+    });
+  </script>
 </body>
 </html>
